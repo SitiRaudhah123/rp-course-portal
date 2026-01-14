@@ -1,53 +1,58 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { diplomas } from '../data';
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { diplomas } from "../data";
 
 function Register() {
   const [searchParams] = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
 
   const [values, setValues] = useState({
-    name: '',
-    email: '',
-    diplomaId: searchParams.get('diploma') || '',
-    moduleId: searchParams.get('module') || '',
+    name: "",
+    email: "",
+    diplomaId: searchParams.get("diploma") || "",
+    moduleId: searchParams.get("module") || "",
   });
 
-  const selectedDiploma = diplomas.find(d => d.id === values.diplomaId);
+  const selectedDiploma = diplomas.find((d) => d.id === values.diplomaId);
   const modules = selectedDiploma?.modules || [];
 
-  const handleChange = e => {
+  const selectedModule =
+    selectedDiploma?.modules.find((m) => m.id === values.moduleId) || null;
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === 'diplomaId' ? { moduleId: '' } : {}),
+      ...(name === "diplomaId" ? { moduleId: "" } : {}),
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
   };
 
   if (submitted) {
     return (
-      <div>
+      <section>
         <h1>Thank you, {values.name}!</h1>
         <p>
-          Your interest in {selectedDiploma?.name || 'the selected diploma'} has
-          been recorded.
+          Your interest in{" "}
+          {selectedDiploma?.name || "the selected diploma"}
+          {selectedModule ? ` – ${selectedModule.name}` : ""} has been
+          recorded.
         </p>
         <p>We will contact you at {values.email}.</p>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div>
+    <section>
       <h1>Register Your Interest</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-row">
           <label>
             Full name
             <input
@@ -59,7 +64,7 @@ function Register() {
           </label>
         </div>
 
-        <div>
+        <div className="form-row">
           <label>
             Email
             <input
@@ -72,7 +77,7 @@ function Register() {
           </label>
         </div>
 
-        <div>
+        <div className="form-row">
           <label>
             Diploma
             <select
@@ -82,7 +87,7 @@ function Register() {
               required
             >
               <option value="">Select a diploma</option>
-              {diplomas.map(d => (
+              {diplomas.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.name}
                 </option>
@@ -91,7 +96,7 @@ function Register() {
           </label>
         </div>
 
-        <div>
+        <div className="form-row">
           <label>
             Module
             <select
@@ -102,7 +107,7 @@ function Register() {
               disabled={!values.diplomaId}
             >
               <option value="">Select a module</option>
-              {modules.map(m => (
+              {modules.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name}
                 </option>
@@ -111,9 +116,11 @@ function Register() {
           </label>
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" className="btn-primary">
+          Submit
+        </button>
       </form>
-    </div>
+    </section>
   );
 }
 
