@@ -1,24 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import Diplomas from './pages/Diplomas';
+import DiplomaDetail from './pages/DiplomaDetail';
+import ModuleDetail from './pages/ModuleDetail';
+import Register from './pages/Register';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/diplomas" replace />} />
+
+        <Route path="/diplomas" element={<Diplomas />} />
+
+        <Route path="/diplomas/:diplomaId" element={<DiplomaDetail />} />
+
+        <Route
+          path="/diplomas/:diplomaId/:moduleId"
+          element={<ModuleDetail />}
+        />
+
+        <Route path="/register" element={<Register />} />
+
+        <Route path="*" element={<p>Page not found</p>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
